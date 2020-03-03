@@ -26,6 +26,8 @@ SOFTWARE.
 """
 
 
+import random
+
 from typing import Callable, Tuple, Union
 
 
@@ -36,6 +38,7 @@ class Players:
         """
         self.players = {'One': 'x', 'Two': 'o'}
         self.player = self.players['One']
+        self.computer = False
 
     def switch_player(self) -> None:
         """Switch active player."""
@@ -51,6 +54,7 @@ class GameBoard():
         self.board = [['1', '2', '3'],
                       ['4', '5', '6'],
                       ['7', '8', '9']]
+        self.moves = [n for n in range(1, 10)]
 
     def draw(self) -> None:
         """Draw the game board."""
@@ -85,12 +89,15 @@ class GameBoard():
             index = (2, square - 7)  # row three
 
         # Check if square has already been played
-        row, col = index
-        if self.board[row][col] == 'x' or self.board[row][col] == 'o':
-            print('Square already taken')
+        if square not in self.moves:
+            print('\nSquare already taken')
             return False
 
+        # remove square from available moves
+        self.moves.remove(square)
+
         # Return index of square to mark
+        row, col = index
         index = (row, col)
         return index
 
@@ -127,12 +134,21 @@ class GameBoard():
         :param player: player whose turn it is
         :return: False or number representing a game board square
         """
+        number = input(f"\n{player}'s turn, Enter a number: ")
         try:
-            number = input(f"\n{player}'s turn, Enter a number: ")
             square = self.validate_move(int(number))
         except ValueError:
             print('Invalid input, try again.')
             return False
+
+        return square
+
+    def generate_move(self) -> int:
+        """Generate a move for computer's turn.
+        :return: Number representing a game board square
+        """
+        random_square = random.choice(self.moves)
+        square = self.validate_move(random_square)
 
         return square
 
@@ -157,6 +173,28 @@ def catch_keyboard_interrupt(func) -> Callable:
     return wrapper
 
 
+def game_config() -> bool:
+    """Player must choose between Human vs Human or Human vs Computer.
+    :return: Boolean value, True if human vs computer
+    """
+    while True:
+        print('1) Human vs Human')
+        print('2) Human vs Computer')
+
+        game_type = input('\nGame type [1-2]: ')
+        try:
+            game_type = int(game_type)
+        except ValueError:
+            print('\nPlease enter 1 or 2\n')
+            continue
+
+        if game_type == 1:
+            return False
+        elif game_type == 2:
+            return True
+        else:
+            print('\nPlease enter 1 or 2\n')
+
 @catch_keyboard_interrupt
 def main() -> None:
     """Main function."""
@@ -164,13 +202,22 @@ def main() -> None:
     board = GameBoard()  # create the game board
     move_counter = 0     # track how many moves have been played
 
-    print('Tic-Tac-Toe')
+    print('Tic-Tac-Toe\n')
+
+    # Game type, if True, o is computer generated
+    players.computer = game_config()
+
+    # Draw the board
     board.draw()
 
     # Main loop
     while True:
         # Get a move
-        square = board.get_move(players.player)
+        if players.player == players.players['Two'] and players.computer:
+            square = board.generate_move()
+            print("\nComputer's turn")
+        else:
+            square = board.get_move(players.player)
         if not square:
             continue
 
