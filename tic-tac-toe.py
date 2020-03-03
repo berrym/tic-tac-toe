@@ -31,24 +31,38 @@ import random
 from typing import Callable, Tuple, Union
 
 
+class Player:
+    """Create a player.
+    :param mark: String used for when str() or print() are called
+    """
+    def __init__(self, mark: str) -> None:
+        self.mark = mark
+        self.ai = False         # true if player is computer
+
+    def __repr__(self) -> str:
+        return "Player()"
+
+    def __str__(self) -> str:
+        return self.mark
+
+
 class Players:
     def __init__(self) -> None:
         """Create two players, player One is x, player Two is o.
         Player One starts the game.
         """
-        self.players = {'One': 'x', 'Two': 'o'}
-        self.player = self.players['One']
-        self.computer = False
+        self.players = {'One': Player('x'), 'Two': Player('o')}
+        self.active = self.players['One']
 
     def switch_player(self) -> None:
         """Switch active player."""
-        if self.player == self.players['One']:
-            self.player = self.players['Two']
+        if self.active == self.players['One']:
+            self.active = self.players['Two']
         else:
-            self.player = self.players['One']
+            self.active = self.players['One']
 
 
-class GameBoard():
+class GameBoard:
     def __init__(self) -> None:
         """Create the game board, represented as a 3x3 matrix."""
         self.board = [['1', '2', '3'],
@@ -68,7 +82,7 @@ class GameBoard():
         :param square: valid matrix index
         """
         row, col = square
-        self.board[row][col] = player
+        self.board[row][col] = str(player)
 
     def validate_move(self, square: int) -> Union[bool, Tuple[int, int]]:
         """Check that a square is a valid play.
@@ -129,7 +143,7 @@ class GameBoard():
 
         return winner
 
-    def get_move(self, player: str) -> Union[bool, int]:
+    def get_move(self, player: Player) -> Union[bool, int]:
         """Get a move from a player.
         :param player: player whose turn it is
         :return: False or number representing a game board square
@@ -173,9 +187,9 @@ def catch_keyboard_interrupt(func) -> Callable:
     return wrapper
 
 
-def game_config() -> bool:
+def game_config(players: Players) -> None:
     """Player must choose between Human vs Human or Human vs Computer.
-    :return: Boolean value, True if human vs computer
+    :param players: Players object, for setting attribute ai True for player Two
     """
     while True:
         print('1) Human vs Human')
@@ -190,9 +204,10 @@ def game_config() -> bool:
 
         # Return true of false
         if game_type == 1:
-            return False
+            break
         elif game_type == 2:
-            return True
+            players.players['Two'].ai = True
+            break
         else:
             print('\nPlease enter 1 or 2\n')
 
@@ -206,8 +221,8 @@ def main() -> None:
 
     print('Tic-Tac-Toe\n')
 
-    # Game type, if True, o is computer generated
-    players.computer = game_config()
+    # Game type
+    game_config(players)
 
     # Draw the board
     board.draw()
@@ -215,16 +230,16 @@ def main() -> None:
     # Main loop
     while True:
         # Get a move
-        if players.player == players.players['Two'] and players.computer:
+        if players.active.ai:
+            print(f"\n{players.active}'s turn")
             square = board.generate_move()
-            print("\nComputer's turn")
         else:
-            square = board.get_move(players.player)
+            square = board.get_move(players.active)
         if not square:
             continue
 
         # Update the board
-        board.mark(players.player, square)
+        board.mark(players.active, square)
         board.draw()
 
         # Swap whose turn it is
