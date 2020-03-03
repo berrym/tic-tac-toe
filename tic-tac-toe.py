@@ -188,12 +188,14 @@ def game_config() -> bool:
             print('\nPlease enter 1 or 2\n')
             continue
 
+        # Return true of false
         if game_type == 1:
             return False
         elif game_type == 2:
             return True
         else:
             print('\nPlease enter 1 or 2\n')
+
 
 @catch_keyboard_interrupt
 def main() -> None:
