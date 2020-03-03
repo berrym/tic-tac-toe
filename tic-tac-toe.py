@@ -32,17 +32,15 @@ from typing import Callable, Tuple, Union
 
 
 class Player:
-    """Create a player.
-    :param mark: String used for when str() or print() are called
-    """
     def __init__(self, mark: str) -> None:
+        """Create a player.
+        :param mark: String used for when str() or print() are called
+        """
         self.mark = mark
         self.ai = False         # true if player is computer
 
-    def __repr__(self) -> str:
-        return "Player()"
-
     def __str__(self) -> str:
+        """String representation of Play for print() and str() calls."""
         return self.mark
 
 
@@ -70,13 +68,11 @@ class GameBoard:
                       ['7', '8', '9']]
         self.moves = [n for n in range(1, 10)]
 
-    def draw(self) -> None:
-        """Draw the game board."""
-        print()
-        for row in self.board:
-            print(row)
+    def __str__(self) -> None:
+        """String representation of the board."""
+        return f'\n{self.board[0]}\n{self.board[1]}\n{self.board[2]}'
 
-    def mark(self, player: str, square: Union[bool, int]) -> None:
+    def mark(self, player: str, square: Union[bool, Tuple]) -> None:
         """Mark a square on the board as played.
         :param player: current player
         :param square: valid matrix index
@@ -225,7 +221,7 @@ def main() -> None:
     game_config(players)
 
     # Draw the board
-    board.draw()
+    print(board)
 
     # Main loop
     while True:
@@ -240,7 +236,7 @@ def main() -> None:
 
         # Update the board
         board.mark(players.active, square)
-        board.draw()
+        print(board)
 
         # Swap whose turn it is
         players.switch_player()
