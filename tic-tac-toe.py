@@ -26,6 +26,7 @@ SOFTWARE.
 """
 
 
+import time
 import random
 
 from typing import Callable, Tuple, Union
@@ -187,9 +188,10 @@ def game_config(players: Players) -> None:
     """
     print('1) Human vs Human')
     print('2) Human vs Computer')
-    print('3) Computer vs Human\n')
+    print('3) Computer vs Human')
+    print('4) Computer vs Computer\n')
 
-    while game_type := input('Game type [1, 2, 3]: '):
+    while game_type := input('Game type [1, 2, 3, 4]: '):
         try:
             game_type = int(game_type)
         except ValueError:
@@ -204,6 +206,10 @@ def game_config(players: Players) -> None:
             break
         elif game_type == 3:
             players.players['One'].ai = True
+            break
+        elif game_type == 4:
+            players.players['One'].ai = True
+            players.players['Two'].ai = True
             break
         else:
             print('\nPlease enter 1 or 2\n')
@@ -231,6 +237,7 @@ def main() -> None:
         if players.active.ai:
             print(f"\n{players.active}'s turn")
             square = board.generate_move()
+            time.sleep(1)
         else:
             square = board.get_move(players.active)
         if not square:
