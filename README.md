@@ -18,6 +18,10 @@ Copyright 2020
 Michael Berry <trismegustis@gmail.com>
 
 ## Version History
+* 0.3.0
+    * Require Python 3.8 for walrus operator
+* 0.2.0
+    * Added pseudo-random AI
 * 0.1.0
     * Initial Release
 
