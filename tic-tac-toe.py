@@ -69,11 +69,11 @@ class GameBoard:
                       ['7', '8', '9']]
         self.moves = [n for n in range(1, 10)]
 
-    def __str__(self) -> None:
+    def __str__(self) -> str:
         """String representation of the board."""
         return f'\n{self.board[0]}\n{self.board[1]}\n{self.board[2]}'
 
-    def mark(self, player: Player, square: Union[bool, Tuple]) -> None:
+    def mark(self, player: Player, square: Tuple[int, int]) -> None:
         """Mark a square on the board as played.
         :param player: current player
         :param square: valid matrix index
