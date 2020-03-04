@@ -107,8 +107,6 @@ class GameBoard:
         self.moves.remove(square)
 
         # Return index of square to mark
-        row, col = index
-        index = (row, col)
         return index
 
     def check_winner(self) -> Union[None, str]:
