@@ -6,7 +6,7 @@ Simple tic-tac-toe like game written in Python.
 
 ## Getting started
 
-Use a recent version of Python, tested with 3.6+
+Python 3.8+ is required
 
 ### Installing
 
