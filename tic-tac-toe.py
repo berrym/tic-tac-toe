@@ -186,9 +186,10 @@ def game_config(players: Players) -> None:
     :param players: Players object, for setting attribute ai True for player Two
     """
     print('1) Human vs Human')
-    print('2) Human vs Computer\n')
+    print('2) Human vs Computer')
+    print('3) Computer vs Human\n')
 
-    while game_type := input('Game type [1-2]: '):
+    while game_type := input('Game type [1, 2, 3]: '):
         try:
             game_type = int(game_type)
         except ValueError:
@@ -200,6 +201,9 @@ def game_config(players: Players) -> None:
             break
         elif game_type == 2:
             players.players['Two'].ai = True
+            break
+        elif game_type == 3:
+            players.players['One'].ai = True
             break
         else:
             print('\nPlease enter 1 or 2\n')
