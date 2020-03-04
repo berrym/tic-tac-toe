@@ -72,7 +72,7 @@ class GameBoard:
         """String representation of the board."""
         return f'\n{self.board[0]}\n{self.board[1]}\n{self.board[2]}'
 
-    def mark(self, player: str, square: Union[bool, Tuple]) -> None:
+    def mark(self, player: Player, square: Union[bool, Tuple]) -> None:
         """Mark a square on the board as played.
         :param player: current player
         :param square: valid matrix index
@@ -87,7 +87,7 @@ class GameBoard:
         """
         # Square number should be from 1 to 9
         if square not in range(1, 10):
-            print('Invalid square, enter 1-9')
+            print('Invalid move, enter 1-9')
             return False
 
         # Convert square number to a valid index on game board
@@ -187,11 +187,10 @@ def game_config(players: Players) -> None:
     """Player must choose between Human vs Human or Human vs Computer.
     :param players: Players object, for setting attribute ai True for player Two
     """
-    while True:
-        print('1) Human vs Human')
-        print('2) Human vs Computer')
+    print('1) Human vs Human')
+    print('2) Human vs Computer\n')
 
-        game_type = input('\nGame type [1-2]: ')
+    while game_type := input('Game type [1-2]: '):
         try:
             game_type = int(game_type)
         except ValueError:
@@ -214,6 +213,7 @@ def main() -> None:
     players = Players()  # create players x and o
     board = GameBoard()  # create the game board
     move_counter = 0     # track how many moves have been played
+    winner = None
 
     print('Tic-Tac-Toe\n')
 
@@ -224,7 +224,7 @@ def main() -> None:
     print(board)
 
     # Main loop
-    while True:
+    while not winner:
         # Get a move
         if players.active.ai:
             print(f"\n{players.active}'s turn")
@@ -248,10 +248,8 @@ def main() -> None:
             break
 
         # Check for a winner
-        winner = board.check_winner()
-        if winner is not None:
+        if (winner := board.check_winner()) is not None:
             print(f'\nGame over! {winner} wins.')
-            break
 
 
 # __main__? Program entry point
