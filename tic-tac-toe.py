@@ -45,7 +45,7 @@ class Player:
         return self.mark
 
 
-class Players:
+class PlayerSet:
     def __init__(self) -> None:
         """Create two players, player One is x, player Two is o.
         Player One starts the game.
@@ -182,10 +182,12 @@ def catch_keyboard_interrupt(func) -> Callable:
     return wrapper
 
 
-def game_config(players: Players) -> None:
-    """Player must choose between Human vs Human or Human vs Computer.
-    :param players: Players object, for setting attribute ai True for player Two
+def game_config() -> PlayerSet:
+    """Configure a PlayerSet, human vs human, human vs computer, etc.
+    :return: a configured PlayerSet
     """
+    players = PlayerSet()
+
     print('1) Human vs Human')
     print('2) Human vs Computer')
     print('3) Computer vs Human')
@@ -214,21 +216,18 @@ def game_config(players: Players) -> None:
         else:
             print('\nPlease enter 1 or 2\n')
 
+    return players
+
 
 @catch_keyboard_interrupt
 def main() -> None:
     """Main function."""
-    players = Players()  # create players x and o
-    board = GameBoard()  # create the game board
-    move_counter = 0     # track how many moves have been played
-    winner = None
+    board = GameBoard()        # create the game board
+    players = game_config()    # create players x and o
+    move_counter = 0           # track how many moves have been played
+    winner = None              # winning player
 
     print('Tic-Tac-Toe\n')
-
-    # Game type
-    game_config(players)
-
-    # Draw the board
     print(board)
 
     # Main loop
@@ -247,14 +246,14 @@ def main() -> None:
         board.mark(players.active, square)
         print(board)
 
-        # Swap whose turn it is
-        players.switch_player()
-
         # Increase the number of moves made
         move_counter += 1
         if move_counter == 8:
             print('\nGame over.  Draw.')
             break
+
+        # Swap whose turn it is
+        players.switch_player()
 
         # Check for a winner
         if (winner := board.check_winner()) is not None:

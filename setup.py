@@ -2,7 +2,7 @@ from setuptools import setup
 
 setup(
     name='tic-tac-toe',
-    version='0.3.1',
+    version='0.3.2',
     packages=[''],
     url='https://github.com/berrym/tic-tac-toe.git',
     license='MIT',

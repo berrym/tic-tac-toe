@@ -17,7 +17,9 @@ Clone the git repository from https://github.com/berrym/tic-tac-toe.git
 Copyright 2020
 Michael Berry <trismegustis@gmail.com>
 
-## Version History
+## Version Histor
+* 0.3.2
+    * Under the hood changes.
 * 0.3.1
     * Computer can be player One, Two, or both.
 * 0.3.0
