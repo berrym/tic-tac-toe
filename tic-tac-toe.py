@@ -41,7 +41,7 @@ class Player:
         self.ai = False         # true if player is computer
 
     def __str__(self) -> str:
-        """String representation of Play for print() and str() calls."""
+        """String representation of Player for print() and str() calls."""
         return self.mark
 
 
@@ -248,7 +248,7 @@ def main() -> None:
 
         # Increase the number of moves made
         move_counter += 1
-        if move_counter == 8:
+        if move_counter == 9:
             print('\nGame over.  Draw.')
             break
 
