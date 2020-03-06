@@ -197,7 +197,7 @@ def game_config() -> PlayerSet:
         try:
             game_type = int(game_type)
         except ValueError:
-            print('\nPlease enter 1 or 2\n')
+            print('\nPlease enter 1, 2, 3, or 4\n')
             continue
 
         # Return true of false
@@ -214,7 +214,7 @@ def game_config() -> PlayerSet:
             players.players['Two'].ai = True
             break
         else:
-            print('\nPlease enter 1 or 2\n')
+            print('\nPlease enter 1, 2, 3, or 4\n')
 
     return players
 
