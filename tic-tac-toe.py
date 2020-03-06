@@ -231,7 +231,7 @@ def main() -> None:
     print(board)
 
     # Main loop
-    while not winner:
+    while (winner := board.check_winner()) is None:
         # Get a move
         if players.active.ai:
             print(f"\n{players.active}'s turn")
@@ -250,14 +250,12 @@ def main() -> None:
         move_counter += 1
         if move_counter == 9:
             print('\nGame over.  Draw.')
-            break
+            exit(0)
 
         # Swap whose turn it is
         players.switch_player()
 
-        # Check for a winner
-        if (winner := board.check_winner()) is not None:
-            print(f'\nGame over! {winner} wins.')
+    print(f'\nGame over! {winner} wins.')
 
 
 # __main__? Program entry point
