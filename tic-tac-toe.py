@@ -188,6 +188,7 @@ def game_config() -> PlayerSet:
     """
     players = PlayerSet()
 
+    print('Tic-tac-toe\n')
     print('1) Human vs Human')
     print('2) Human vs Computer')
     print('3) Computer vs Human')
@@ -227,7 +228,6 @@ def main() -> None:
     move_counter = 0           # track how many moves have been played
     winner = None              # winning player
 
-    print('Tic-Tac-Toe\n')
     print(board)
 
     # Main loop
@@ -239,6 +239,7 @@ def main() -> None:
             time.sleep(1)
         else:
             square = board.get_move(players.active)
+
         if not square:
             continue
 
@@ -247,8 +248,7 @@ def main() -> None:
         print(board)
 
         # Increase the number of moves made
-        move_counter += 1
-        if move_counter == 9:
+        if (move_counter := move_counter + 1) == 9:
             print('\nGame over.  Draw.')
             exit(0)
 
