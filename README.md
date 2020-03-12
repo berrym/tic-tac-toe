@@ -17,7 +17,7 @@ Clone the git repository from https://github.com/berrym/tic-tac-toe.git
 Copyright 2020
 Michael Berry <trismegustis@gmail.com>
 
-## Version Histor
+## Version History
 * 0.4.0
     * Created a better tic-tac-toe board for better UX
 * 0.3.2
