@@ -18,6 +18,8 @@ Copyright 2020
 Michael Berry <trismegustis@gmail.com>
 
 ## Version Histor
+* 0.4.0
+    * Created a better tic-tac-toe board for better UX
 * 0.3.2
     * Under the hood changes.
 * 0.3.1
