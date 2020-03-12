@@ -63,15 +63,20 @@ class PlayerSet:
 
 class GameBoard:
     def __init__(self) -> None:
-        """Create the game board, represented as a 3x3 matrix."""
+        """Create the logic game board, represented as a 3x3 matrix."""
         self.board = [['1', '2', '3'],
                       ['4', '5', '6'],
                       ['7', '8', '9']]
         self.moves = [n for n in range(1, 10)]
 
-    def __str__(self) -> str:
-        """String representation of the board."""
-        return f'\n{self.board[0]}\n{self.board[1]}\n{self.board[2]}'
+    def __str__(self) -> None:
+        """Display the pretty ascii board."""
+        return f'''
+        {self.board[0][0]} | {self.board[0][1]} | {self.board[0][2]}
+        ----------
+        {self.board[1][0]} | {self.board[1][1]} | {self.board[1][2]}
+        ----------
+        {self.board[2][0]} | {self.board[2][1]} | {self.board[2][2]}'''
 
     def mark(self, player: Player, square: Tuple[int, int]) -> None:
         """Mark a square on the board as played.
@@ -239,9 +244,8 @@ def main() -> None:
             time.sleep(1)
         else:
             square = board.get_move(players.active)
-
-        if not square:
-            continue
+            if not square:
+                continue
 
         # Update the board
         board.mark(players.active, square)
