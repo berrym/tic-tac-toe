@@ -78,41 +78,49 @@ class GameBoard:
         ----------
         {self.board[2][0]} | {self.board[2][1]} | {self.board[2][2]}'''
 
-    def mark(self, player: Player, square: Tuple[int, int]) -> None:
-        """Mark a square on the board as played.
+    def mark(self, player: Player, move: Tuple[int, int]) -> None:
+        """Mark a move on the board as played.
         :param player: current player
-        :param square: valid matrix index
+        :param move: valid matrix index
         """
-        row, col = square
+        row, col = move
         self.board[row][col] = str(player)
 
-    def validate_move(self, square: int) -> Union[bool, Tuple[int, int]]:
-        """Check that a square is a valid play.
-        :param square: int representing index of board matrix
+    def validate_move(self, move: int) -> Union[bool, Tuple[int, int]]:
+        """Check that a move is a valid play.
+        :param move: int representing index of board matrix
         :return: valid row,col tuple or boolean False
         """
-        # Square number should be from 1 to 9
-        if square not in range(1, 10):
+        # Move number should be from 1 to 9
+        if move not in range(1, 10):
             print('Invalid move, enter 1-9')
             return False
 
-        # Convert square number to a valid index on game board
-        if square in range(1, 4):
-            index = (0, square - 1)  # row one
-        elif square in range(4, 7):
-            index = (1, square - 4)  # row two
-        else:
-            index = (2, square - 7)  # row three
+        # Convert move number to a valid index on game board
+        index_lookup ={
+            1: (0, 0),
+            2: (0, 1),
+            3: (0, 2),
+            4: (1, 0),
+            5: (1, 1),
+            6: (1, 2),
+            7: (2, 0),
+            8: (2, 1),
+            9: (2, 2)
+            }
 
-        # Check if square has already been played
-        if square not in self.moves:
-            print('\nSquare already taken')
+        if move in index_lookup.keys():
+            index = index_lookup[move]
+
+        # Check if move has already been played
+        if move not in self.moves:
+            print('\nMove already taken')
             return False
 
-        # remove square from available moves
-        self.moves.remove(square)
+        # remove move from available moves
+        self.moves.remove(move)
 
-        # Return index of square to mark
+        # Return index of move to mark
         return index
 
     def check_winner(self) -> Union[None, str]:
@@ -146,25 +154,25 @@ class GameBoard:
     def get_move(self, player: Player) -> Union[bool, int]:
         """Get a move from a player.
         :param player: player whose turn it is
-        :return: False or number representing a game board square
+        :return: False or number representing a game board move
         """
         number = input(f"\n{player}'s turn, Enter a number: ")
         try:
-            square = self.validate_move(int(number))
+            move = self.validate_move(int(number))
         except ValueError:
             print('Invalid input, try again.')
             return False
 
-        return square
+        return move
 
     def generate_move(self) -> int:
         """Generate a move for computer's turn.
-        :return: Number representing a game board square
+        :return: Number representing a game board move
         """
-        random_square = random.choice(self.moves)
-        square = self.validate_move(random_square)
+        random_move = random.choice(self.moves)
+        move = self.validate_move(random_move)
 
-        return square
+        return move
 
 
 def catch_keyboard_interrupt(func) -> Callable:
@@ -237,24 +245,24 @@ def main() -> None:
 
     # Main loop
     while (winner := board.check_winner()) is None:
+        # Increase the number of moves made
+        if (move_counter := move_counter + 1) == 10:
+            print('\nGame over.  Draw.')
+            exit(0)
+
         # Get a move
         if players.active.ai:
             print(f"\n{players.active}'s turn")
-            square = board.generate_move()
+            move = board.generate_move()
             time.sleep(1)
         else:
-            square = board.get_move(players.active)
-            if not square:
+            move = board.get_move(players.active)
+            if not move:
                 continue
 
         # Update the board
-        board.mark(players.active, square)
+        board.mark(players.active, move)
         print(board)
-
-        # Increase the number of moves made
-        if (move_counter := move_counter + 1) == 9:
-            print('\nGame over.  Draw.')
-            exit(0)
 
         # Swap whose turn it is
         players.switch_player()
