@@ -38,7 +38,7 @@ class Player:
         :param mark: String used for when str() or print() are called
         """
         self.mark = mark
-        self.ai = False         # true if player is computer
+        self.ai = False  # true if player is computer
 
     def __str__(self) -> str:
         """String representation of Player for print() and str() calls."""
@@ -50,33 +50,31 @@ class PlayerSet:
         """Create two players, player One is x, player Two is o.
         Player One starts the game.
         """
-        self.players = {'One': Player('x'), 'Two': Player('o')}
-        self.active = self.players['One']
+        self.players = {"One": Player("x"), "Two": Player("o")}
+        self.active = self.players["One"]
 
     def switch_player(self) -> None:
         """Switch active player."""
-        if self.active == self.players['One']:
-            self.active = self.players['Two']
+        if self.active == self.players["One"]:
+            self.active = self.players["Two"]
         else:
-            self.active = self.players['One']
+            self.active = self.players["One"]
 
 
 class GameBoard:
     def __init__(self) -> None:
         """Create the logic game board, represented as a 3x3 matrix."""
-        self.board = [['1', '2', '3'],
-                      ['4', '5', '6'],
-                      ['7', '8', '9']]
+        self.board = [["1", "2", "3"], ["4", "5", "6"], ["7", "8", "9"]]
         self.moves = [n for n in range(1, 10)]
 
     def __str__(self) -> None:
         """Display the pretty ascii board."""
-        return f'''
+        return f"""
         {self.board[0][0]} | {self.board[0][1]} | {self.board[0][2]}
         ----------
         {self.board[1][0]} | {self.board[1][1]} | {self.board[1][2]}
         ----------
-        {self.board[2][0]} | {self.board[2][1]} | {self.board[2][2]}'''
+        {self.board[2][0]} | {self.board[2][1]} | {self.board[2][2]}"""
 
     def mark(self, player: Player, move: Tuple[int, int]) -> None:
         """Mark a move on the board as played.
@@ -93,11 +91,11 @@ class GameBoard:
         """
         # Move number should be from 1 to 9
         if move not in range(1, 10):
-            print('Invalid move, enter 1-9')
+            print("Invalid move, enter 1-9")
             return False
 
         # Convert move number to a valid index on game board
-        index_lookup ={
+        index_lookup = {
             1: (0, 0),
             2: (0, 1),
             3: (0, 2),
@@ -106,18 +104,18 @@ class GameBoard:
             6: (1, 2),
             7: (2, 0),
             8: (2, 1),
-            9: (2, 2)
-            }
+            9: (2, 2),
+        }
 
         if move in index_lookup.keys():
             index = index_lookup[move]
 
         # Check if move has already been played
         if move not in self.moves:
-            print('\nMove already taken')
+            print("\nMove already taken")
             return False
 
-        # remove move from available moves
+        # Remove move from available moves
         self.moves.remove(move)
 
         # Return index of move to mark
@@ -160,7 +158,7 @@ class GameBoard:
         try:
             move = self.validate_move(int(number))
         except ValueError:
-            print('Invalid input, try again.')
+            print("Invalid input, try again.")
             return False
 
         return move
@@ -180,6 +178,7 @@ def catch_keyboard_interrupt(func) -> Callable:
     :param func: function to wrap around
     :return: wrapper function
     """
+
     def wrapper(*args, **kwargs) -> Callable:
         """Wrapper around func to catch keyboard interrupt.
         :param args: wrapped function arguments
@@ -189,7 +188,7 @@ def catch_keyboard_interrupt(func) -> Callable:
         try:
             return func(*args, **kwargs)
         except KeyboardInterrupt:
-            print('\nProcess terminated.')
+            print("\nProcess terminated.")
             exit(0)
 
     return wrapper
@@ -201,34 +200,34 @@ def game_config() -> PlayerSet:
     """
     players = PlayerSet()
 
-    print('Tic-tac-toe\n')
-    print('1) Human vs Human')
-    print('2) Human vs Computer')
-    print('3) Computer vs Human')
-    print('4) Computer vs Computer\n')
+    print("Tic-tac-toe\n")
+    print("1) Human vs Human")
+    print("2) Human vs Computer")
+    print("3) Computer vs Human")
+    print("4) Computer vs Computer\n")
 
-    while game_type := input('Game type [1, 2, 3, 4]: '):
+    while game_type := input("Game type [1, 2, 3, 4]: "):
         try:
             game_type = int(game_type)
         except ValueError:
-            print('\nPlease enter 1, 2, 3, or 4\n')
+            print("\nPlease enter 1, 2, 3, or 4\n")
             continue
 
         # Return true of false
         if game_type == 1:
             break
         elif game_type == 2:
-            players.players['Two'].ai = True
+            players.players["Two"].ai = True
             break
         elif game_type == 3:
-            players.players['One'].ai = True
+            players.players["One"].ai = True
             break
         elif game_type == 4:
-            players.players['One'].ai = True
-            players.players['Two'].ai = True
+            players.players["One"].ai = True
+            players.players["Two"].ai = True
             break
         else:
-            print('\nPlease enter 1, 2, 3, or 4\n')
+            print("\nPlease enter 1, 2, 3, or 4\n")
 
     return players
 
@@ -236,10 +235,10 @@ def game_config() -> PlayerSet:
 @catch_keyboard_interrupt
 def main() -> None:
     """Main function."""
-    board = GameBoard()        # create the game board
-    players = game_config()    # create players x and o
-    move_counter = 0           # track how many moves have been played
-    winner = None              # winning player
+    board = GameBoard()  # create the game board
+    players = game_config()  # create players x and o
+    move_counter = 0  # track how many moves have been played
+    winner = None  # winning player
 
     print(board)
 
@@ -247,7 +246,7 @@ def main() -> None:
     while (winner := board.check_winner()) is None:
         # Increase the number of moves made
         if (move_counter := move_counter + 1) == 10:
-            print('\nGame over.  Draw.')
+            print("\nGame over.  Draw.")
             exit(0)
 
         # Get a move
@@ -267,9 +266,9 @@ def main() -> None:
         # Swap whose turn it is
         players.switch_player()
 
-    print(f'\nGame over! {winner} wins.')
+    print(f"\nGame over! {winner} wins.")
 
 
 # __main__? Program entry point
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()
