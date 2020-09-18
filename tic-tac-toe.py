@@ -84,7 +84,7 @@ class GameBoard:
         row, col = move
         self.board[row][col] = str(player)
 
-    def validate_move(self, move: int) -> Union[bool, Tuple[int, int]]:
+    def translate_to_coord(self, move: int) -> Union[bool, Tuple[int, int]]:
         """Check that a move is a valid play.
         :param move: int representing index of board matrix
         :return: valid row,col tuple or boolean False
@@ -121,7 +121,7 @@ class GameBoard:
         # Return index of cell to mark
         return cell
 
-    def check_winner(self) -> Union[None, str]:
+    def is_game_over(self) -> Union[None, str]:
         """Check for wins.
         :return: None or the winning player
         """
@@ -156,7 +156,7 @@ class GameBoard:
         """
         number = input(f"\n{player}'s turn, Enter a number: ")
         try:
-            move = self.validate_move(int(number))
+            move = self.translate_to_coord(int(number))
         except ValueError:
             print("Invalid input, try again.")
             return False
@@ -167,8 +167,19 @@ class GameBoard:
         """Generate a move for computer's turn.
         :return: Number representing a game board move
         """
+        if 5 in self.moves:
+            return self.translate_to_coord(5)
+
+        for i in [1, 3, 7, 9]:
+            if i in self.moves:
+                return self.translate_to_coord(i)
+
+        for i in [2, 4, 6, 8]:
+            if i in self.moves:
+                return self.translate_to_coord(i)
+
         random_move = random.choice(self.moves)
-        move = self.validate_move(random_move)
+        move = self.translate_to_coord(random_move)
 
         return move
 
@@ -243,7 +254,7 @@ def main() -> None:
     print(board)
 
     # Main loop
-    while (winner := board.check_winner()) is None:
+    while (winner := board.is_game_over()) is None:
         # Increase the number of moves made
         if (move_counter := move_counter + 1) == 10:
             print("\nGame over.  Draw.")
