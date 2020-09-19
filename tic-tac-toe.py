@@ -123,15 +123,15 @@ class GameBoard:
         return coord
 
     def is_game_over(self) -> Union[None, str]:
-        """Check for wins.
-        :return: None or the winning player
+        """Check for end of game.
+        :return: None, Draw or the winning player
         """
-        winner = None
+        result = None
 
         # Check for horizontal wins
         for row in self.board:
             if row[0] == row[1] == row[2]:
-                winner = row[0]
+                result = row[0]
 
         # Check for vertical wins
         for col in range(len(self.board[0])):
@@ -139,16 +139,20 @@ class GameBoard:
             for row in self.board:
                 vertical.append(row[col])
             if vertical[0] == vertical[1] == vertical[2]:
-                winner = vertical[0]
+                result = vertical[0]
 
         # Check for diagonal wins
         if self.board[0][0] == self.board[1][1] == self.board[2][2]:
-            winner = self.board[0][0]
+            result = self.board[0][0]
 
         if self.board[0][2] == self.board[1][1] == self.board[2][0]:
-            winner = self.board[2][0]
+            result = self.board[2][0]
 
-        return winner
+        # Check for draw
+        if len(self.moves) == 0:
+            return "Draw"
+
+        return result
 
     def get_move(self, player: Player) -> Union[bool, int]:
         """Get a move from a player.
@@ -248,18 +252,12 @@ def game_config() -> PlayerSet:
 def main() -> None:
     """Main function."""
     board = GameBoard()  # create the game board
-    move_counter = 0  # track how many moves have been played
     winner = None  # winning player
 
     print(board)
 
     # Main loop
-    while (winner := board.is_game_over()) is None:
-        # Increase the number of moves made
-        if (move_counter := move_counter + 1) == 10:
-            print("\nGame over.  Draw.")
-            exit(0)
-
+    while (result := board.is_game_over()) is None:
         # Get a move
         if board.players.active.ai:
             print(f"\n{board.players.active}'s turn")
@@ -277,7 +275,10 @@ def main() -> None:
         # Swap whose turn it is
         board.players.switch_player()
 
-    print(f"\nGame over! {winner} wins.")
+    if result == "Draw":
+        print(f"\nGame over. Draw.")
+    else:
+        print(f"\nGame over! {result} wins.")
 
 
 # __main__? Program entry point
