@@ -66,6 +66,7 @@ class GameBoard:
         """Create the logic game board, represented as a 3x3 matrix."""
         self.board = [["1", "2", "3"], ["4", "5", "6"], ["7", "8", "9"]]
         self.moves = [n for n in range(1, 10)]
+        self.players = game_config()
 
     def __str__(self) -> str:
         """Display the pretty ascii board."""
@@ -94,8 +95,8 @@ class GameBoard:
             print("Invalid move, enter 1-9")
             return False
 
-        # Convert move number to a valid cell on game board
-        cell_lookup = {
+        # Convert move number to a valid coord on game board
+        coord_lookup = {
             1: (0, 0),
             2: (0, 1),
             3: (0, 2),
@@ -107,8 +108,8 @@ class GameBoard:
             9: (2, 2),
         }
 
-        if move in cell_lookup.keys():
-            cell = cell_lookup[move]
+        if move in coord_lookup.keys():
+            coord = coord_lookup[move]
 
         # Check if move has already been played
         if move not in self.moves:
@@ -118,8 +119,8 @@ class GameBoard:
         # Remove move from available moves
         self.moves.remove(move)
 
-        # Return index of cell to mark
-        return cell
+        # Return index of coord to mark
+        return coord
 
     def is_game_over(self) -> Union[None, str]:
         """Check for wins.
@@ -247,7 +248,6 @@ def game_config() -> PlayerSet:
 def main() -> None:
     """Main function."""
     board = GameBoard()  # create the game board
-    player_set = game_config()  # create players x and o
     move_counter = 0  # track how many moves have been played
     winner = None  # winning player
 
@@ -261,21 +261,21 @@ def main() -> None:
             exit(0)
 
         # Get a move
-        if player_set.active.ai:
-            print(f"\n{player_set.active}'s turn")
+        if board.players.active.ai:
+            print(f"\n{board.players.active}'s turn")
             move = board.generate_move()
             time.sleep(1)
         else:
-            move = board.get_move(player_set.active)
+            move = board.get_move(board.players.active)
             if not move:
                 continue
 
         # Update the board
-        board.mark(player_set.active, move)
+        board.mark(board.players.active, move)
         print(board)
 
         # Swap whose turn it is
-        player_set.switch_player()
+        board.players.switch_player()
 
     print(f"\nGame over! {winner} wins.")
 
